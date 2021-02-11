@@ -1,4 +1,4 @@
-# 
+# This script works with python3.6, it is not necessary to install any external libraries
 #
 #
 #
@@ -19,7 +19,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-
+COMMASPACE = ', '
 
 class emailProcess:
 
@@ -29,29 +29,23 @@ class emailProcess:
                   receiver: list,
                   subject: str,
                   body: str,
-                  body_type: str,                # specify the type of the body: text --> plain, HTML --> html
-                  word_file_path: str = None,
-                  word_file_name: str = None,
-                  excel_file_path: str = None,
-                  excel_file_name: str = None,
-                  pdf_file_path: str = None,
-                  pdf_file_name: str = None,
-                  server: str = None,            # use 'smtp.gmail.com' or 'smtp-mail.outlook.com'
+                  body_type: str,                            # specify the type of the body: text --> plain, HTML --> html
+                  server: str,                               # use 'smtp.gmail.com' or 'smtp-mail.outlook.com'
+                  list_of_file_path_attachment: list = None,
+                  list_of_file_name_attachment: list = None
                   ):
 
         message = self.useMIMEMultipartToOrganizeEmail(sender, receiver, subject, body, body_type)
 
-        if word_file_path is not None \
-                and word_file_name is not None:
-            message = self.addAttachment(message, word_file_path, word_file_name)
+        if list_of_file_path_attachment is not None \
+                and list_of_file_name_attachment is not None:
+            len_of_list = len(list_of_file_path_attachment)
+            for i in range(0, len_of_list):
+                message = self.addAttachment(message,
+                                             '{}'.format(list_of_file_path_attachment[i]),
+                                             '{}'.format(list_of_file_name_attachment[i])
+                                             )
 
-        if excel_file_path is not None \
-                and excel_file_name is not None:
-            message = self.addAttachment(message, excel_file_path, excel_file_name)
-
-        if pdf_file_path is not None \
-                and pdf_file_name is not None:
-            message = self.addAttachment(message, pdf_file_path, pdf_file_name)
 
         self.createConnection(sender, sender_psw, receiver, message, server)
 
@@ -62,7 +56,7 @@ class emailProcess:
         message = MIMEMultipart()
         # Details the email
         message['From'] = sender
-        message['To'] = receiver
+        message['To'] = COMMASPACE.join(receiver)
         message['Subject'] = subject
         email_body = MIMEText(body, body_type)
         message.attach(email_body)
@@ -98,3 +92,20 @@ class emailProcess:
         except Exception as e:
             print('Error during connection to outlook account')
             print(e)
+
+
+if __name__ == '__main__':
+    emailProcess = emailProcess()
+    emailProcess.send_mail(sender='adriano.caruso@eng.it',
+                           sender_psw='Test0011#',
+                           receiver=['adriano.caruso@hotmail.it', 'adriano.caruso87@gmail.com'],
+                           subject='Titolo della Mail',
+                           body='Corpo della mail',
+                           body_type='plain',
+                           server='smtp-mail.outlook.com',
+                           list_of_file_path_attachment=['/home/osboxes/Scrivania/Covid come collegarsi.odt',
+                                                         '/home/osboxes/Scrivania/progetto TIM file excel/sintesi_restricted.xlsx',
+                                                         '/home/osboxes/Scrivania/photo5845853164971078859.pdf'],
+                           list_of_file_name_attachment=['Covid come collegarsi.odt', 'sintesi_restricted.xlsx',
+                                                         'photo5845853164971078859.pdf']
+                           )
