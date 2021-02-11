@@ -1,3 +1,9 @@
+# 
+#
+#
+#
+#
+
 '''All the necessary libraryes'''
 
 # Notice that google is not allowing to log in via smtplib because it has flagged this sort of login as
@@ -6,16 +12,14 @@
 # both for sender and receiver (if both are google account)
 # with this method it's possible to sent email from gmail account to every other email account
 
-import smtplib
-import pandas as pd
-import os
-
 '''This library permits to better organize body, cc and others of the email'''
+
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
 from email.mime.base import MIMEBase
 from email import encoders
+
 
 class emailProcess:
 
@@ -32,13 +36,25 @@ class emailProcess:
                   excel_file_name: str = None,
                   pdf_file_path: str = None,
                   pdf_file_name: str = None,
-                  connect_to_server: str = None,  # use 'smtp.gmail.com' or 'smtp-mail.outlook.com'
+                  server: str = None,            # use 'smtp.gmail.com' or 'smtp-mail.outlook.com'
                   ):
 
+        message = self.useMIMEMultipartToOrganizeEmail(sender, receiver, subject, body, body_type)
 
+        if word_file_path is not None \
+                and word_file_name is not None:
+            message = self.addAttachment(message, word_file_path, word_file_name)
 
+        if excel_file_path is not None \
+                and excel_file_name is not None:
+            message = self.addAttachment(message, excel_file_path, excel_file_name)
 
-        return sender
+        if pdf_file_path is not None \
+                and pdf_file_name is not None:
+            message = self.addAttachment(message, pdf_file_path, pdf_file_name)
+
+        self.createConnection(sender, sender_psw, receiver, message, server)
+
 
     def useMIMEMultipartToOrganizeEmail(self, sender, receiver, subject,
                                         body, body_type):
