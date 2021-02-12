@@ -16,7 +16,9 @@
 # The huger file tested is about 12MB, using a lot of file the process slow down in terms of execution's time
 # To send attachment it is mandatory to follow those rules:
 # 1) in the variable list_of_file_path_attachment add the file path to add as attachment
-# 2) in the variable name_of_file_path_attachment
+# 2) in the variable name_of_file_path_attachment it is necessary to add the name of the file with his extension in the
+#    same order in witch they appear in the list_of_file_path_attachment
+# See an example at the bottom of the script
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -100,20 +102,23 @@ class emailProcess:
 
 if __name__ == '__main__':
     emailProcess = emailProcess()
-    emailProcess.send_mail(sender='adriano.caruso@eng.it',
-                           sender_psw='Test0011#',
-                           receiver=['adriano.caruso@hotmail.it', 'adriano.caruso87@gmail.com'],
+    emailProcess.send_mail(sender='your_email@eng.it',
+                           sender_psw='your_password',
+                           receiver=['receiver_mail1@hotmail.it', 'receiver_mail2@gmail.com'],
                            subject='Titolo della Mail',
                            body='Corpo della mail',
-                           body_type='plain',
-                           server='smtp-mail.outlook.com',
-                           list_of_file_path_attachment=['/home/osboxes/Scrivania/Covid come collegarsi.odt',
-                                                         '/home/osboxes/Scrivania/progetto TIM file excel/sintesi_restricted.xlsx',
-                                                         '/home/osboxes/Scrivania/photo5845853164971078859.pdf',
-                                                         '/home/osboxes/Scrivania/Analisi_errori_covid19 finale.pptx',
-                                                         '/home/osboxes/Scrivania/risultato.csv',
-                                                         '/home/osboxes/Scrivania/requirements.txt'],
-                           list_of_file_name_attachment=['Covid come collegarsi.odt', 'sintesi_restricted.xlsx',
-                                                         'photo5845853164971078859', 'Analisi_errori_covid19 finale.pptx',
-                                                         'risultato.csv', 'requirements.txt']
+                           body_type='plain',  # Due we use a text body is necessary to use plain as body type
+                           server='smtp-mail.outlook.com',  # string for outlook account
+                           list_of_file_path_attachment=['your_path/word_file_name.odt',
+                                                         'your_path/excel_file_name.xlsx',
+                                                         'your_path/pdf_file_name.pdf',
+                                                         'your_path/power_point_file_name.pptx',
+                                                         'your_path/csv_file_name.csv',
+                                                         'your_path/text_file_name.txt'],
+                           list_of_file_name_attachment=['word_file_name.odt',
+                                                         'excel_file_name.xlsx',
+                                                         'pdf_file_name.pdf',
+                                                         'power_point_file_name.pptx',
+                                                         'csv_file_name.csv',
+                                                         'text_file_name.txt']
                            )
