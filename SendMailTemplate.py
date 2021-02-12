@@ -1,18 +1,22 @@
 # This script works with python3.6, it is not necessary to install any external libraries
-#
-#
-#
-#
-
-'''All the necessary libraryes'''
-
-# Notice that google is not allowing to log in via smtplib because it has flagged this sort of login as
-# "less secure" so it's necessary to perform this steps:
+# MIME is used to better organize the entire email
+# To connect to email account is necessary to specify user credential: sender and sender_psw
+# It is possible to send emails to different receivers, use a list, receiver, to pass all the email's address
+# To create the email's body you can use text or html body, it is necessary to specify the type of body you are using
+# to the body_type parameter, consider this rule: for text --> plain instead for HTML --> html
+# If you want to connect to a gmail account pass to server parameter the string 'smtp.gmail.com', to connect to
+# an outlook account pass 'smtp-mail.outlook.com'
+# Notice that google is not allowing to log in via smtplib because it has flagged this sort of login as "less secure"
+# so it's necessary to perform this steps:
 # go to Manage pur google account --> Security --> Access app less secure --> set flag to on
-# both for sender and receiver (if both are google account)
-# with this method it's possible to sent email from gmail account to every other email account
-
-'''This library permits to better organize body, cc and others of the email'''
+# both for sender and receiver (if both are google account), in this way it is possible to send email from gmail account
+# to every other email account
+# It is possible to send attachment to the mail of the following type: word, excel, pdf, pptx, txt, csv
+# No other types of attachment has been tested so it is possible that this process work also for other file's type
+# The huger file tested is about 12MB, using a lot of file the process slow down in terms of execution's time
+# To send attachment it is mandatory to follow those rules:
+# 1) in the variable list_of_file_path_attachment add the file path to add as attachment
+# 2) in the variable name_of_file_path_attachment
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -105,7 +109,11 @@ if __name__ == '__main__':
                            server='smtp-mail.outlook.com',
                            list_of_file_path_attachment=['/home/osboxes/Scrivania/Covid come collegarsi.odt',
                                                          '/home/osboxes/Scrivania/progetto TIM file excel/sintesi_restricted.xlsx',
-                                                         '/home/osboxes/Scrivania/photo5845853164971078859.pdf'],
+                                                         '/home/osboxes/Scrivania/photo5845853164971078859.pdf',
+                                                         '/home/osboxes/Scrivania/Analisi_errori_covid19 finale.pptx',
+                                                         '/home/osboxes/Scrivania/risultato.csv',
+                                                         '/home/osboxes/Scrivania/requirements.txt'],
                            list_of_file_name_attachment=['Covid come collegarsi.odt', 'sintesi_restricted.xlsx',
-                                                         'photo5845853164971078859.pdf']
+                                                         'photo5845853164971078859', 'Analisi_errori_covid19 finale.pptx',
+                                                         'risultato.csv', 'requirements.txt']
                            )
