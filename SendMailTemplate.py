@@ -27,7 +27,8 @@ from email.mime.base import MIMEBase
 from email import encoders
 COMMASPACE = ', '
 
-class emailProcess:
+
+class EmailProcess:
 
     def send_mail(self,
                   sender: str,
@@ -35,7 +36,7 @@ class emailProcess:
                   receiver: list,
                   subject: str,
                   body: str,
-                  body_type: str,                            # specify the type of the body: text --> plain, HTML --> html
+                  body_type: str,                            # specify type of the body: text --> plain, HTML --> html
                   server: str,                               # use 'smtp.gmail.com' or 'smtp-mail.outlook.com'
                   list_of_file_path_attachment: list = None,
                   list_of_file_name_attachment: list = None
@@ -52,9 +53,7 @@ class emailProcess:
                                              '{}'.format(list_of_file_name_attachment[i])
                                              )
 
-
         self.createConnection(sender, sender_psw, receiver, message, server)
-
 
     def useMIMEMultipartToOrganizeEmail(self, sender, receiver, subject,
                                         body, body_type):
@@ -67,7 +66,6 @@ class emailProcess:
         email_body = MIMEText(body, body_type)
         message.attach(email_body)
         return message
-
 
     def addAttachment(self, message, path, file_name):
         # Open file in binary mode
@@ -83,7 +81,6 @@ class emailProcess:
         # Add the attachment to the email
         message.attach(attach_loader)
         return message
-
 
     def createConnection(self, sender, sender_psw, receiver, message, server):
         # Create SMTP session for sending the mail
@@ -101,7 +98,8 @@ class emailProcess:
 
 
 if __name__ == '__main__':
-    emailProcess = emailProcess()
+    emailProcess = EmailProcess()
+
     emailProcess.send_mail(sender='your_email@eng.it',
                            sender_psw='your_password',
                            receiver=['receiver_mail1@hotmail.it', 'receiver_mail2@gmail.com'],
